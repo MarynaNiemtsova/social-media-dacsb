@@ -12,9 +12,18 @@ html {
 body {
   margin: 0;
   padding: 0;
-  font-family: var(--font-family);
-  background: var(--dark-bg);
-  color: var(--dark-text2);
+  font-family: var(--font-inter);
+  background: var(--background);
+  color: var(--text-color);
+}
+
+.visually-hidden {
+  position: absolute;
+  left: -10000px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
 }
 
 h1,
@@ -32,6 +41,12 @@ h1 {
   h1 {
     font-size: 1.75rem;
   }
+}
+
+h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  color: var(--text-color2);
 }
 
 a,
@@ -129,13 +144,6 @@ body.dark {
   }
 }
 
-@media (min-width: 40em) {
-  .flex-parent {
-    display: flex;
-    gap: 1.875rem;
-  }
-}
-
 .header {
   display: flex;
   flex-wrap: wrap;
@@ -158,38 +166,26 @@ body.dark {
 .header_subtitle {
   font-size: 0.875rem;
   font-weight: 700;
-  color: var(--dark-text1);
+  color: var(--dark-text2);
 }
 
 .toggle {
   display: grid;
-  grid-template-columns: 1fr 3.75rem 1fr;
-  grid-template-rows: repeat(2, 1fr);
-  gap: 0.3rem 0.5rem;
+  grid-template-columns: 1fr 3rem;
   border: none;
   margin: 0;
 }
 .toggle label {
   font-size: 0.875rem;
-  align-self: center;
+  font-weight: 700;
+  color: var(--toggle);
 }
 .toggle label[for=dark] {
-  grid-column: 1/2;
-  justify-self: end;
+  line-height: 1.5rem;
+  margin-right: 0.8125rem;
 }
-.toggle label[for=system] {
-  grid-column: 1/4;
-  grid-row: 2/3;
-  justify-self: center;
-  align-self: start;
-}
-.toggle label[for=light] {
-  grid-column: 3/4;
-}
-.toggle_wrapper {
+.toggle__wrapper {
   position: relative;
-  grid-column: 2/3;
-  grid-row: 1/2;
   height: 1.5rem;
 }
 .toggle input[type=radio] {
@@ -198,20 +194,20 @@ body.dark {
   width: 1.5rem;
   height: 1.5rem;
 }
-.toggle input[type=radio]:focus ~ .toggle_button {
+.toggle input[type=radio]:focus ~ .toggle__button {
   border: 2px solid white;
 }
-.toggle_background {
+.toggle__background {
   display: block;
   height: 100%;
   position: absolute;
   width: 100%;
   top: 0;
   border-radius: 0.75rem;
-  background: linear-gradient(225deg, var(--toggle-bg-end) 0%, var(--toggle-bg-start) 98.02%);
+  background: var(--toggle-bg);
   pointer-events: none;
 }
-.toggle_button {
+.toggle__button {
   position: absolute;
   left: 0.1875rem;
   top: 0.1875rem;
@@ -219,14 +215,14 @@ body.dark {
   width: 1.125rem;
   height: 1.125rem;
   border-radius: 50%;
-  background-color: var(--dark-bg);
+  background-color: var(--toggle-button);
   transition: all 150ms ease-in-out;
 }
-.toggle #light:checked ~ .toggle_button {
+.toggle #light:checked ~ .toggle__button {
   left: calc(100% - 21px);
   right: 3px;
 }
-.toggle #system:checked ~ .toggle_button {
+.toggle #system:checked ~ .toggle__button {
   left: 50%;
   right: auto;
   transform: translate(-50%);
@@ -249,20 +245,53 @@ body.dark {
 }
 
 .card {
-  background: var(--dark-card);
+  position: relative;
+  overflow: hidden;
+  background: var(--card-bg);
   color: var(--dark-text1);
   padding: 1.5625rem;
   border-radius: 0.3125rem;
   text-align: center;
+  transition: background 150ms ease-in-out;
+  cursor: pointer;
+}
+.card:hover {
+  background: var(--card-hover);
 }
 .card--facebook {
   border-top: 0.3125rem solid var(--facebook);
+}
+.card--twitter {
+  border-top: 0.3125rem solid var(--twitter);
+}
+.card--instagram {
+  padding-top: 1.875rem;
+}
+.card--instagram::before {
+  content: "";
+  position: absolute;
+  display: block;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 0.3125rem;
+  background: linear-gradient(225deg, var(--instagram-end), var(--instagram-middle) 50.91%, var(--instagram-start) 100%);
+}
+.card--youtube {
+  border-top: 0.3125rem solid var(--youtube);
 }
 .card__platform {
   display: flex;
   justify-content: center;
   align-items: center;
+  height: 1.25rem;
+  margin-top: 0.3125rem;
   margin-bottom: 1.75rem;
+}
+.card__subtitle {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--text-color2);
 }
 .card__icon {
   margin-right: 0.5rem;
@@ -270,12 +299,13 @@ body.dark {
 .card__username {
   font-size: 0.75rem;
   font-weight: 700;
+  color: var(--text-color2);
 }
-.card__folowers {
+.card__followers {
   margin-bottom: 1.5625rem;
 }
 .card__count {
-  color: var(--light-bg);
+  color: var(--text-color);
   font-weight: 700;
   letter-spacing: -0.125rem;
   line-height: 1;
@@ -284,11 +314,14 @@ body.dark {
 .card__count--big {
   font-size: 3.5rem;
 }
+.card__count--small {
+  font-size: 2rem;
+}
 .card__label {
   font-size: 0.75rem;
   letter-spacing: 0.3125rem;
   font-weight: 400;
-  color: var(--dark-text1);
+  color: var(--text-color2);
   text-transform: uppercase;
 }
 .card__change {
@@ -302,11 +335,26 @@ body.dark {
   color: var(--limegreen);
 }
 .card__change--down {
-  color: var(--bbrightred);
+  color: var(--brightred);
 }
 .card__change img {
   margin-right: 0.25rem;
 }
-.card__number {
-  margin-right: 0.25rem;
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, auto);
+  justify-items: start;
+  gap: 1.4375rem;
+}
+.card-grid .card__count {
+  margin-bottom: 0;
+}
+.card-grid .card__count,
+.card-grid .card__change {
+  align-self: end;
+}
+.card-grid img,
+.card-grid .card__change {
+  justify-self: end;
 }/*# sourceMappingURL=style.css.map */
